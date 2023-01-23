@@ -1,0 +1,10 @@
+.idea/
+envs/
+server/cache/
+server/Model/
+server/cache
+server/__pycache__/
+server/Model
+tevatron
+server/elastic-umls-master/
+server/Model

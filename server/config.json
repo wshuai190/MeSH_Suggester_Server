@@ -1,0 +1,8 @@
+{
+  "url": "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi",
+  "key": "f4bc8cc0e17e8c4328c18ff0a89b5328d108",
+  "umls_url": "http://127.0.0.1:9200/umls/_search?pretty=true&q=",
+  "username": "ielab",
+  "secret": "gUCt8MbTKJasmMqpKNBQ",
+  "metamap_url": "http://ielab-metamap.uqcloud.net/mm/candidates"
+}

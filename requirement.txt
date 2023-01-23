@@ -1,0 +1,17 @@
+Cython==0.29.32
+datasets==2.1.0
+faiss-cpu==1.7.2
+gensim==4.2.0
+huggingface-hub==0.9.1
+numpy
+pandas
+pyserini==0.17.1
+scikit-learn
+scipy
+spacy
+tokenizers==0.12.1
+torch==1.10.1
+tqdm==4.64.0
+transformers==4.18.0
+Flask
+waitress
