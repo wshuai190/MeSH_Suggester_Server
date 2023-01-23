@@ -1,7 +1,22 @@
 # ECIR-MeSH-Suggest-Demo
 
+## Use of UMLS and MetaMAP:
 
-Useful commands:
+To use umls or metamap method for suggestion, it requires building of elastic server for both methods. For UMLS, please follow instruction on [umls_link](https://github.com/ielab/elastic-umls); for MetaMAP, follow instruction on [metamap_link](https://lhncbc.nlm.nih.gov/ii/tools/MetaMap/documentation/Installation.html)
+
+
+## Preparation
+Download our fine-tuned model from [model_link](https://drive.google.com/drive/folders/1VF5yeYgHnFtaspWGZNAsUIp-kQyHUzsI?usp=sharing)
+
+Then put model insiede library as:
+```
+model/checkpoint-80000
+
+model/PubMed-w2v.bin
+```
+
+
+## Useful commands for Enviroment Setup:
 
 `conda create --prefix ./envs python==3.8`
 
@@ -31,6 +46,9 @@ Go to `web-app` directory, then:
 
 `npm install`
 
+
+## To start/initialise
+
 To start server, go to server directory, then run:
 
 `python3 main.py`
@@ -39,28 +57,7 @@ To start client, go to web-app directory, then run:
 
 `npm start`
 
-During server start, call:
-
-`prepare_model()` to load model, etc in ram, this function can also be load if current server fail to reload model
-`prepare_model will output mesh_dict, model, tokenizer, retriever, look_up, model_w2v`
-
-During client time:
-
-Post Method Input:
-
-`{"Keywords": list[str], "Type":str()}`
-
-Type can be "Semantic", "Fragment", or "Atomic"
 
 
-Post Method Output:
-
-`list[{"Keywords": list[str], "Type":str(), "MeSH_Terms": list[str]}]`
-
-Method to call 
-
-`suggest_mesh_terms(input_dict={Post Method Input}, model, tokenizer, retriever, look_up, mesh_dict, model_w2v)`
-
-Method return Post Method Output
 
 
