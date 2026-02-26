@@ -1,0 +1,18 @@
+services:
+  mesh-suggester:
+    build: .
+    ports:
+      - "7860:7860"
+    volumes:
+      # Source code — changes here are picked up with `docker compose restart`
+      # (no rebuild needed after the first build)
+      - ./app.py:/app/app.py
+      - ./server:/app/server
+      # Named volume for models — persists across rebuilds so they are
+      # never re-downloaded unless you explicitly `docker volume rm` it.
+      - mesh_models:/app/server/Model
+    environment:
+      - GRADIO_SERVER_PORT=7860
+
+volumes:
+  mesh_models:

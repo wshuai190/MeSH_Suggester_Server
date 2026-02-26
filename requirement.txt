@@ -1,17 +1,24 @@
-Cython==0.29.32
-datasets==2.1.0
-faiss-cpu==1.7.2
-gensim==4.2.0
-huggingface-hub==0.9.1
+# Core ML / retrieval  (tevatron replaced by local shim in server/tevatron/)
+faiss-cpu>=1.7
+gensim>=4.2
 numpy
-pandas
-pyserini==0.17.1
 scikit-learn
 scipy
-spacy
-tokenizers==0.12.1
-torch==1.10.1
-tqdm==4.64.0
-transformers==4.18.0
+tokenizers>=0.12
+torch>=1.10
+tqdm>=4.64
+transformers>=4.18
+
+# Hugging Face
+huggingface-hub>=0.16
+
+# Web framework (legacy Flask server kept for standalone use)
 Flask
+flask-cors
 waitress
+
+# Gradio UI
+gradio>=4.0
+
+# Model download helpers
+gdown>=4.7

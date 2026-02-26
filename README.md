@@ -1,65 +1,120 @@
-# ECIR-MeSH-Suggest-Demo
+---
+title: MeSH Suggester
+emoji: 🔬
+colorFrom: blue
+colorTo: indigo
+sdk: docker
+app_port: 7860
+pinned: false
+---
 
-## Use of UMLS and MetaMAP:
+# MeSH Term Suggester
 
-To use umls or metamap method for suggestion, it requires building of elastic server for both methods. For UMLS, please follow instruction on [umls_link](https://github.com/ielab/elastic-umls); for MetaMAP, follow instruction on [metamap_link](https://lhncbc.nlm.nih.gov/ii/tools/MetaMap/documentation/Installation.html)
+AI-powered MeSH term suggestion for systematic review boolean query construction.
+Built with **Gradio** (pure Python — no Node/npm required).
 
+---
 
-## Preparation
-Download our fine-tuned model from [model_link](https://drive.google.com/drive/folders/1VF5yeYgHnFtaspWGZNAsUIp-kQyHUzsI?usp=sharing)
+## Quick Start (local, pip)
 
-Then put model insiede library as:
+```bash
+# 1. Create environment
+conda create --prefix ./envs python=3.9
+conda activate ./envs
+
+# 2. Install dependencies
+pip install -r requirement.txt
+
+# 3. Install tevatron (Dense retrieval library)
+git clone https://github.com/texttron/tevatron
+pip install -e tevatron/
+
+# 4. Download model files  (~433 MB BERT + PubMed-w2v.bin)
+python download_models.py
+
+# 5. Launch the app
+python app.py
+# → open http://localhost:7860
 ```
-model/checkpoint-80000
 
-model/PubMed-w2v.bin
+---
+
+## Quick Start (Docker)
+
+```bash
+# First run — builds image and downloads models into a named volume (~2 GB, once only)
+docker compose up --build
+
+# → open http://localhost:7860
 ```
 
+After the first run, models are stored in a Docker named volume (`mesh_models`).
+**Code changes** don't require a rebuild — just:
 
-## Useful commands for Enviroment Setup:
+```bash
+docker compose restart
+```
 
-`conda create --prefix ./envs python==3.8`
+**Dependency changes** (`requirement.txt`) do need a rebuild, but models are still
+in the named volume so they won't be re-downloaded.
 
-`conda activate ./envs`
+---
 
-`pip install -r requirement.txt`
+## Model files
 
+| File | Source | Destination |
+|------|--------|-------------|
+| BERT checkpoint | [ielabgroup/mesh_term_suggestion_biobert](https://huggingface.co/ielabgroup/mesh_term_suggestion_biobert) | `server/Model/checkpoint-80000/` |
+| PubMed-w2v.bin | [Google Drive](https://drive.google.com/drive/folders/1VF5yeYgHnFtaspWGZNAsUIp-kQyHUzsI) | `server/Model/PubMed-w2v.bin` |
 
-`conda install -c conda-forge nodejs`
+`download_models.py` handles both automatically.
 
-`conda upgrade -c conda-forge nodejs`
+---
 
+## Hugging Face Spaces deployment
 
-If your conda does not have git, install git:
+HF Spaces has no persistent volumes, so models must be baked into the image.
 
-`conda install -c anaconda git`
+```bash
+# Push to your Space remote (HF Spaces uses git)
+git remote add space https://huggingface.co/spaces/ielabgroup/mesh-suggester
+git push space main
+```
 
-Clone tevatron under the root directory:
+HF Spaces will build the Dockerfile with `BAKE_MODELS=true` (set this in Space settings
+under **Secrets / Variables** → add `BAKE_MODELS=true` as a build argument, or pass it
+via the Dockerfile default). Models are downloaded once at build time and baked in.
 
-`git clone https://github.com/texttron/tevatron`
+Alternatively, add this to your Space's `README.md` build config:
+```
+build_args:
+  BAKE_MODELS: "true"
+```
 
-`cd tevatron`
+---
 
-`pip3 install --editable .`
+## Suggestion methods
 
-Go to `web-app` directory, then:
+| Method | Description |
+|--------|-------------|
+| **Semantic-BERT** | Groups semantically similar keywords via word2vec, then queries the BERT retriever per group |
+| **Fragment-BERT** | Treats all keywords as a single query fragment |
+| **Atomic-BERT** | Runs the BERT retriever independently for each keyword |
+| **ATM** | Uses the NCBI Entrez API (no local model required) |
 
-`npm install`
+---
 
+## Use of UMLS and MetaMAP (optional)
 
-## To start/initialise
+To use UMLS or MetaMAP suggestion, you need to deploy the respective services locally.
+See [elastic-umls](https://github.com/ielab/elastic-umls) and the
+[MetaMAP installation guide](https://lhncbc.nlm.nih.gov/ii/tools/MetaMap/documentation/Installation.html).
 
-To start server, go to server directory, then run:
-
-`python3 main.py`
-
-To start client, go to web-app directory, then run:
-
-`npm start`
+---
 
 ## Citing
 
-If you use the *Mesh Suggester* system in your research, please cite the following paper:
+If you use MeSH Suggester in your research, please cite:
 
 ```bibtex
 @inproceedings{wang2023mesh,
@@ -71,9 +126,11 @@ If you use the *Mesh Suggester* system in your research, please cite the followi
 }
 ```
 
+---
+
 ## License
 
-Shield: [![CC BY-NC-ND 4.0][cc-by-nc-nd-shield]][cc-by-nc-nd]
+[![CC BY-NC-ND 4.0][cc-by-nc-nd-shield]][cc-by-nc-nd]
 
 This work is licensed under a
 [Creative Commons Attribution-NonCommercial-NoDerivs 4.0 International License][cc-by-nc-nd].
@@ -83,11 +140,3 @@ This work is licensed under a
 [cc-by-nc-nd]: http://creativecommons.org/licenses/by-nc-nd/4.0/
 [cc-by-nc-nd-image]: https://licensebuttons.net/l/by-nc-nd/4.0/88x31.png
 [cc-by-nc-nd-shield]: https://img.shields.io/badge/License-CC%20BY--NC--ND%204.0-lightgrey.svg
-
-
-[![License: CC BY-NC-ND 4.0](https://licensebuttons.net/l/by-nc-nd/4.0/88x31.png)](https://creativecommons.org/licenses/by-nc-nd/4.0/)
-
-
-
-
-

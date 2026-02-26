@@ -1,0 +1,40 @@
+# Version control
+.git
+.gitignore
+
+# Model files — downloaded at build time by download_models.py
+server/Model/
+
+# Legacy React client (not used in the Gradio app)
+client/
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Virtual environments / conda
+envs/
+.venv/
+venv/
+
+# macOS
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+
+# Build artefacts
+*.egg-info/
+dist/
+build/
+
+# Local cache directories
+cache/
+server/cache/
+
+# Binary — not needed in container
+bigbro
