@@ -83,7 +83,7 @@ def _parse_query(text: str):
             f"min-width:160px'>"
             f"<div style='font-size:10px;font-weight:700;color:{c};"
             f"text-transform:uppercase;letter-spacing:.6px;"
-            f"margin-bottom:7px'>Group {i + 1}</div>"
+            f"margin-bottom:7px'>Fragment {i + 1}</div>"
             f"<div style='display:flex;flex-wrap:wrap;gap:5px'>{badges}</div>"
             f"</div>"
         )
@@ -94,7 +94,7 @@ def _parse_query(text: str):
 def _empty_groups_html():
     return (
         "<p style='margin:6px 0;color:#9ca3af;font-size:14px;font-style:italic'>"
-        "Parsed keyword groups will appear here.</p>"
+        "Parsed query fragments will appear here.</p>"
     )
 
 
@@ -158,7 +158,7 @@ def _suggest(groups: list, method: str):
                             terms.append(t)
 
             for t in terms:
-                label = f"[G{i + 1}]  {t}"
+                label = f"[F{i + 1}]  {t}"
                 all_checkboxes.append((label, f"{i}::{t}"))
             all_results.append({"group_idx": i, "keywords": group, "terms": terms})
 
@@ -213,7 +213,7 @@ def _build_cards(results: list[dict], groups: list[list[str]]) -> str:
             f"padding:16px;box-shadow:0 1px 4px rgba(0,0,0,.06)'>"
             f"<div style='font-size:10px;font-weight:700;color:{c};"
             f"text-transform:uppercase;letter-spacing:.6px;"
-            f"margin-bottom:8px'>Group {i + 1}</div>"
+            f"margin-bottom:8px'>Fragment {i + 1}</div>"
             f"<div style='display:flex;flex-wrap:wrap;gap:4px;"
             f"margin-bottom:10px'>{kw_chips}</div>"
             f"<hr style='border:none;border-top:1px solid #f1f5f9;margin:8px 0'/>"
@@ -294,8 +294,8 @@ _CSS = """
     justify-content: space-between;
     align-items: center;
 }
-.mesh-header h1  { margin:0; font-size:24px; font-weight:700; letter-spacing:-.4px; }
-.mesh-header p   { margin:4px 0 0; font-size:13px; opacity:.8; }
+.mesh-header h1  { margin:0; font-size:24px; font-weight:700; letter-spacing:-.4px; color:#fff !important; }
+.mesh-header p   { margin:4px 0 0; font-size:13px; opacity:.8; color:#fff !important; }
 .mesh-header .tag {
     background: rgba(255,255,255,.18);
     padding: 5px 13px;
@@ -366,7 +366,7 @@ with gr.Blocks(theme=_theme, css=_CSS, title="MeSH Term Suggester") as demo:
     parse_btn = gr.Button("🔍  Parse Query", variant="secondary", size="lg")
 
     gr.HTML("<div style='margin-top:14px'></div>")
-    groups_html = gr.HTML(value=_empty_groups_html(), label="Detected keyword groups")
+    groups_html = gr.HTML(value=_empty_groups_html(), label="Detected query fragments")
 
     # ── Step 2 ────────────────────────────────────────────────────────────────
     gr.HTML("<div class='step-label' style='margin-top:20px'>STEP 2 — SUGGEST MeSH TERMS</div>")
