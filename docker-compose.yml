@@ -4,15 +4,16 @@ services:
     ports:
       - "7860:7860"
     volumes:
-      # Source code — changes here are picked up with `docker compose restart`
-      # (no rebuild needed after the first build)
+      # Bind-mount source files so code changes are picked up with
+      # `docker compose restart` — no rebuild needed.
+      # server/Model/ is intentionally NOT mounted so the image's
+      # baked-in models are used.
       - ./app.py:/app/app.py
-      - ./server:/app/server
-      # Named volume for models — persists across rebuilds so they are
-      # never re-downloaded unless you explicitly `docker volume rm` it.
-      - mesh_models:/app/server/Model
+      - ./server/suggest_mesh_terms.py:/app/server/suggest_mesh_terms.py
+      - ./server/suggest_with_other.py:/app/server/suggest_with_other.py
+      - ./server/suggest_engine.py:/app/server/suggest_engine.py
+      - ./server/query_parser.py:/app/server/query_parser.py
+      - ./server/config.json:/app/server/config.json
+      - ./server/tevatron:/app/server/tevatron
     environment:
       - GRADIO_SERVER_PORT=7860
-
-volumes:
-  mesh_models:

@@ -6,7 +6,7 @@ RUN apt-get update && \
 
 WORKDIR /app
 
-# Dependencies layer — only re-runs when requirement.txt changes
+# Dependencies — cached unless requirement.txt changes
 COPY requirement.txt .
 RUN pip install --no-cache-dir -r requirement.txt
 
@@ -15,11 +15,10 @@ COPY . .
 
 RUN chmod +x /app/entrypoint.sh
 
-EXPOSE 7860
+# Bake models into the image.
+# This layer is cached by Docker, so code-only changes don't re-download.
+RUN python /app/download_models.py
 
-# For HF Spaces (no docker-compose): download models at build time so they
-# are baked into the image. docker-compose uses the named volume instead.
-ARG BAKE_MODELS=false
-RUN if [ "$BAKE_MODELS" = "true" ]; then python /app/download_models.py; fi
+EXPOSE 7860
 
 ENTRYPOINT ["/app/entrypoint.sh"]

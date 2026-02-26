@@ -4,7 +4,9 @@ server/cache/
 server/Model/
 server/cache
 server/__pycache__/
+**/__pycache__/
+*.pyc
 server/Model
-tevatron
+# tevatron/  ← removed: replaced by local shim at server/tevatron/
 server/elastic-umls-master/
 server/Model
